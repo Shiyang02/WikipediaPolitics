@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikipedia Politics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --accent2: #9b59b6;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            background-attachment: fixed;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+        
+        /* 导航栏样式 */
+        header {
+            background: linear-gradient(135deg, var(--primary), #1a2530);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* 目录导航 */
+        .toc {
+            position: sticky;
+            top: 100px;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+        
+        .toc h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+            font-size: 1.4rem;
+        }
+        
+        .toc ul {
+            list-style: none;
+        }
+        
+        .toc li {
+            margin-bottom: 12px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: var(--dark);
+            display: block;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .toc a:hover {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .toc a.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* 主标题 */
+        .hero {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 0 40px;
+            margin-bottom: 30px;
+        }
+        
+        .hero h1 {
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hero p.subtitle {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: var(--gray);
+            font-weight: 300;
+        }
+        
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .meta-item {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            min-width: 200px;
+        }
+        
+        .meta-item h3 {
+            color: var(--accent);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        
+        /* 内容区 */
+        .content {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+        
+        /* 作者网格 */
+        .authors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .author-card {
+            background: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .author-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .author-img {
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+        }
+        
+        .author-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .author-info {
+            padding: 20px;
+            flex: 1;
+        }
+        
+        .author-info h3 {
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        
+        .author-info p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        /* 书籍内容部分 */
+        .book-overview {
+            margin-bottom: 50px;
+            line-height: 1.8;
+        }
+        
+        .book-overview p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(52, 152, 219, 0.1) 0%, rgba(155, 89, 182, 0.1) 100%);
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent2);
+            margin: 30px 0;
+        }
+        
+        .chapter {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .chapter-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent2);
+            display: flex;
+            align-items: center;
+        }
+        
+        .chapter-title i {
+            margin-right: 15px;
+            background: var(--accent2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chapter-desc {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            padding-left: 55px;
+        }
+        
+        .papers-list {
+            padding-left: 55px;
+        }
+        
+        .paper-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #dee2e6;
+        }
+        
+        .paper-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .paper-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        
+        .paper-authors {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        
+        .paper-abstract {
+            font-size: 0.95rem;
+            color: #495057;
+        }
+        
+        /* 页脚 */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 50px 0 30px;
+            margin-top: 60px;
+            grid-column: 1 / -1;
+        }
+        
+        .footer-content {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+        }
+        
+        .footer-section p {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+            grid-column: 1 / -1;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1000px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .toc {
+                position: relative;
+                top: 0;
+                margin-bottom: 30px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p.subtitle {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .authors-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .meta-info {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .chapter-desc, .papers-list {
+                padding-left: 0;
+            }
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-book"></i>
+                <span>WikipediaPolitics</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#authors"><i class="fas fa-users"></i> Contributors</a></li>
+                <li><a href="#overview"><i class="fas fa-book-open"></i> Book Overview</a></li>
+                <li><a href="#chapters"><i class="fas fa-file-alt"></i> Details</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <!-- 目录导航 -->
+        <aside class="toc">
+            <h3>Table of Contents</h3>
+            <ul>
+                <li><a href="#overview" class="active">Book Overview: What is Wikipedia Politics</a></li>
+                <li><a href="#authors">Contributing Authors</a></li>
+                <li><a href="#chapter1">Volume 1: Wikipedia through the Lens of Knowledge Politics</a></li>
+                <li><a href="#chapter2">Volume 2: The Self-Organizing Mechanism of Open-Source Knowledge Production in Wikipedia</a></li>
+                <li><a href="#chapter3">Volume 3: Case Studies in the Knowledge Politics of Wikipedia</a></li>
+            </ul>
+        </aside>
+        
+        <main>
+            <!-- 主标题区域 -->
+            <section class="hero">
+                <h1>WIKIPEDIA POLITICS</h1>
+                <p class="subtitle">An Open-Source Book about the Discourse on Global Digital Governance</p>
+                <div class="meta-info">
+                    <div class="meta-item">
+                        <h3>Editors</h3>
+                        <p>Global Research Center on Digital Intelligence Knowledge Systems</p>
+                    </div>
+                    <div class="meta-item">
+                        <h3>Published</h3>
+                        <p>July 2025</p>
+                    </div>
+                    <div class="meta-item">
+                        <h3>Pages</h3>
+                        <p>2779</p>
+                    </div>
+                    <div class="meta-item">
+                        <h3>Papers</h3>
+                        <p>32 Research Papers</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 书籍概述 -->
+            <section class="content" id="overview">
+                <h2 class="section-title">Book Overview: What is Wikipedia Politics</h2>
+                <div class="book-overview">
+                    <div class="highlight">
+                        <p><i class="fas fa-quote-left"></i> Only by clarifying the mechanisms of Wikipedia’s knowledge production and dissemination can we prevent the “tragedy of the commons” in what may be the greatest knowledge repository humanity has produced in the 21st century. Only then can we continue to attract vast numbers of internet users to contribute voluntarily, to sustain and expand its content, and to organize and preserve high-quality knowledge. In doing so, Wikipedia may become the most remarkable recorder, integrator, and representative of human civilization in the vast universe—and, one day, may ride future deep-space technologies to reach the stars and the seas. <i class="fas fa-quote-right"></i></p>
+                        <p style="text-align: right; margin-top: 15px;">— Prof. Gan Lihao, ECNU</p>
+                    </div>
+                    <a href="https://1drv.ms/b/c/af81daf53cec420c/IQQYAxeoTqmJQaSfwBc7qF4fAY-C7xs4xg2132onW7lc2kg" class="btn">Download Introduction (PDF)</a>
+                </div>
+            </section>
+            
+            <!-- 作者介绍部分 -->
+            <section class="content" id="authors">
+                <h2 class="section-title">Contributing Authors</h2>
+                <p style="margin-bottom: 30px;">This book is grown by the collaboration of 25 scholars so far.</p>
+                
+                <div class="authors-grid">
+                    <!-- 作者卡片 - 重复25次 -->
+                    <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQQO7-AvU7UDT5XVqcrrTnIAAXUpyJueJ4_fXGiKYvx8t9M?" alt="Prof. Gan Lihao">
+                        </div>
+                        <div class="author-info">
+                            <h3>Prof. Gan Lihao</h3>
+                            <p>Professor of Communication, East China Normal University</p>
+                        </div>
+                    </div>
+                    
+                    <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQR7P3F41_5NT5PcPBtfNpkOAU_Q7-oGzEbdwMwyYjzKVq4?" alt="Wang Hao">
+                        </div>
+                        <div class="author-info">
+                            <h3>Wang Hao</h3>
+                            <p>PhD. Candidate of Communication, East China Normal University</p>
+                        </div>
+                    </div>
+                    
+                    <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQStIuWzvM2QTobIwGpN3CMPAc9nJp06Mw2wOafCP9sLvAY?" alt="Gao Hairui">
+                        </div>
+                        <div class="author-info">
+                            <h3>Gao Hairui</h3>
+                            <p>PhD. Student of Communication, Nanjing University</p>
+                        </div>
+                    </div>
+                    
+                    <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQSjb6H1vIECSZJsp6XHoOngAWU1e7cAozUyfceyPf5lmg0?" alt="Weng Binting">
+                        </div>
+                        <div class="author-info">
+                            <h3>Weng Binting</h3>
+                            <p>Staff Member at Guangdong Bureau, National Food and Strategic Reserves Administration</p>
+                        </div>
+                    </div>
+                    
+                    <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQRUhb_Lp8eYTamNeuvjN34bAdSZFhYxSK6jp4VSsKTl3Wo?" alt="Lin Shan">
+                        </div>
+                        <div class="author-info">
+                            <h3>Lin Shan</h3>
+                            <p>Internet Advertising Operations Expert, ByteDance</p>
+                        </div>
+                    </div>
+                    
+                    <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQQUcq8KXLknTI_mRoZK3IrJAZ-Q2PKNsD_CW3UBrzWUWMc?" alt="Guan Yonglu">
+                        </div>
+                        <div class="author-info">
+                            <h3>Guan Yonglu</h3>
+                            <p>New Media Specialist, Shanghai University of Finance and Economics</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQR3Xf5YGvx8QKimT4nBh-zMAV8CX9pmVZ7AuTzGlcGQ0M4?" alt="Ding Yao">
+                        </div>
+                        <div class="author-info">
+                            <h3>Ding Yao</h3>
+                            <p>User Operations Specialist, Trip.com Group</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQS4h6rJc4wbTJtiOSGHPvZzATmsPHmYsxnrG8VQA_KDMSM?" alt="Fei Jin">
+                        </div>
+                        <div class="author-info">
+                            <h3>Fei Jin</h3>
+                            <p>Research Assistant, National Center for Discourse Ecology</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQQsR_HB1mW-S6dOLe5sxii3AfuwIOc7T_QzehArSplvCmc?" alt="Hu Jie">
+                        </div>
+                        <div class="author-info">
+                            <h3>Hu Jie</h3>
+                            <p>Journalist, The Paper</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQS4UBhD_G4GTYxnzhfxk2JvAQaPTC3CShY7PbF0hXCNlAs?" alt="Li Juan">
+                        </div>
+                        <div class="author-info">
+                            <h3>Li Juan</h3>
+                            <p>Teacher, Shanghai Foreign Language School (Longgang Campus)</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQSVKYiQq3yYSKoGSmgo10MYAWhapGYE2FZ1lGLu6xjXDS8?" alt="Zhang Haili">
+                        </div>
+                        <div class="author-info">
+                            <h3>Zhang Haili</h3>
+                            <p>PhD. Student of Journalism and New Media, Xi’an Jiaotong University</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQTn7Znx_BV9TIyVI_z63-dzAdco64LSZaI7ZQJ2Eu_535I?" alt="Li Jingxian">
+                        </div>
+                        <div class="author-info">
+                            <h3>Li Jingxian</h3>
+                            <p>Head of Trending Topics Operations, Xiaohongshu</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQRn_xN3OE4iTqFUDXe3K9HoAdBo49x-Q6tCoDE2lKBlB0s?" alt="Wu Di">
+                        </div>
+                        <div class="author-info">
+                            <h3>Wu Di</h3>
+                            <p>Director of External Affairs, School of Computer Science, Shanghai Jiao Tong University</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQSXx58JewPET43u3TLdEx8CAevVM1YjrxfVIIAvM6ZVQYM?" alt="Chen Danyi">
+                        </div>
+                        <div class="author-info">
+                            <h3>Chen Danyi</h3>
+                            <p> Lecturer of E-commerce Live Streaming, Yueyang Vocational and Technical College</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQQVFt5pJmmjTL5UY5Goa0c-AcBEGs-EOIQsjflqvlyEiKY?" alt="Zhu Weibing">
+                        </div>
+                        <div class="author-info">
+                            <h3>Zhu Weibing</h3>
+                            <p> E-commerce Channel Manager, Unilever China</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQQVdcnGCCa_RJHoVSV_G_U3AVwXcjwaMXeUf_B7YLKF5Tg?" alt="Pang Yanru">
+                        </div>
+                        <div class="author-info">
+                            <h3>Pang Yanru</h3>
+                            <p>Senior Business Analyst, Baidu</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQQRZQvSNAPjTqvNipZOON9fATGLKuCagOnzccis0Ta2izU?" alt="Zhao Mi">
+                        </div>
+                        <div class="author-info">
+                            <h3>Zhao Mi</h3>
+                            <p>Staff Member, Shanghai Electric Wind Power Group</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQQJNHHovNaaQapIFLaEO7_EASPJXhU3vJFo2wg8Vl5CaWM?" alt="Zhang Yaqiong">
+                        </div>
+                        <div class="author-info">
+                            <h3>Zhang Yaqiong</h3>
+                            <p>Assistant Researcher, School of Journalism and Communication, East China University of Political Science and Law</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQSfvDQ15wTRQZArS4twctY2AcpQ2jT2CotvNXSUw0028Uk?" alt="Liu Guan">
+                        </div>
+                        <div class="author-info">
+                            <h3>Liu Guan</h3>
+                            <p>Staff Member, UnionPay Business Payment Co., Ltd.</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQQxgv8NZJZaSaoIQPCq97UcAUDkF2MdyRwZ9eHLvAV52Cw?" alt="Zhou Xinyi">
+                        </div>
+                        <div class="author-info">
+                            <h3>Zhou Xinyi</h3>
+                            <p>Civil Servant, Shanghai Municipal Government</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQQ3NUWdJdYoQKTUc0S1sNmeARHvQDi8TMV3fHuSHi4T0ys?" alt="Wan Ziqi">
+                        </div>
+                        <div class="author-info">
+                            <h3>Wan Ziqi</h3>
+                            <p>MA Student of Communication, East China Normal University</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQT0k4RADxoERYEZ2KM72dPZAfNtOy9KQa2vp9OQ5GhfK30?" alt="He Yuanyuan">
+                        </div>
+                        <div class="author-info">
+                            <h3>He Yuanyuan</h3>
+                            <p>Operations Specialist, Alibaba</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQSraJTw1DOCT6DMz6x7UWynAe0pNB_pFDtYLat9b20McPQ?" alt="Zhou Jiamei">
+                        </div>
+                        <div class="author-info">
+                            <h3>Zhou Jiamei</h3>
+                            <p>MA Student of Communication, East China Normal University</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQRYMbpDwj1aR4URedj8xumNAaXwkfEFk4Z8nac_RNMqb_w?" alt="Chen Yiru">
+                        </div>
+                        <div class="author-info">
+                            <h3>Chen Yiru</h3>
+                            <p>Research Assistant, Institute of Regional Branding and Communication, Communication University of China</p>
+                        </div>
+                    </div>
+
+                     <div class="author-card">
+                        <div class="author-img">
+                            <img src="https://1drv.ms/i/c/af81daf53cec420c/IQSIjvSjCuL6Tar2Q0cCYbMyAePbjZ2-4lvrWTWptLTr-m0?" alt="Hu Xindan">
+                        </div>
+                        <div class="author-info">
+                            <h3>Hu Xindan</h3>
+                            <p>MA Student of Communication, East China Normal University</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="text-align: center; margin-top: 30px; font-style: italic;">
+                    ... is still growing with ongoing collaborations.
+                </p>
+            </section>
+            
+            <!-- 章节内容 -->
+            <section class="content" id="chapters">
+                <h2 class="section-title">Book Volumes</h2>
+                
+                <!-- 第一章 -->
+                <div class="chapter" id="chapter1">
+                    <h3 class="chapter-title"><i class="fas fa-brain"></i> Volume 1: Wikipedia through the Lens of Knowledge Politics</h3>
+                    <p class="chapter-desc">This section offers a holistic understanding of Wikipedia and Wikimedia Commons.</p>
+                    
+                    <div class="papers-list">
+                        <div class="paper-item">
+                            <div class="paper-title">How to Understand Wikipedia</div>
+                            <div class="paper-authors">Global Research Center on Digital Intelligence Knowledge Systems</div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Knowledge Production and Dissemination in Wikipedia in the Context of Media Activism</div>
+                            <div class="paper-authors">Gao Hairui</div>
+                            <div class="paper-abstract">
+                                <p>Today, Wikipedia is part of the Wikimedia movement, an iconic example of a global knowledge movement in the open source era.In order to break down Wikipedia's persistent knowledge bias and knowledge imbalance, the Wikimedia movement has conducted a number of topic-specific edit-a-thons, themed challenges, and other campaign practices.Knowledge that had been marginalised, and groups that had been marginalised, became more and more "visible".</p>
+                                <p><br>At present, the academic community's perception and positioning of Wikipedia mainly focuses on the three major aspects of "meta-media", "tool book" and "social media".Positioning Wikipedia from these perspectives makes it difficult to reflect the demands of the Wikimedia movement and its participants for "global knowledge equity".In this regard, we need to rethink the positioning of Wikipedia.</p>
+                                <p><br>Based on this, this paper takes Wikipedia as the object of study, starts from the perspective of global social movement, takes media activism as the theoretical perspective, and uses methods such as trace ethnography, textual analysis and in-depth interviews to try to depict the picture of Wikipedia's global social movement from the multiple perspectives of the Wikimedia movement, the participating communities, and the participating individuals.</p>
+                                <p><br>The value of this paper lies in, on the one hand, expanding the boundaries of Wikipedia research from "encyclopaedia" and "social media" to "global social movement".On the other hand, this paper embeds Wikipedia's global social movement into the research process of media activism.Based on the view that "Wikipedia is a participatory media", this paper provides additional explanations in the dimensions of participatory dynamics, participatory characteristics, and participatory myths.In the context of Wikipedia's open-source knowledge community, the paper considers how participatory media activism can develop as a movement practice.</p>
+                                <p><br>The study found that participatory media activism presents a significant "constructive" logic compared to the "deconstructive" logic of alternative media activism.From the perspective of social movement field, Wikipedia's global social movement is a kind of participatory media activism based on open source knowledge field.In terms of the way of social movement, different from the authoritative, structured and bordered characteristics of alternative media, the global social movement of Wikipedia's participatory media is de-staticised, de-centred and de-bordered.Examined in terms of participant dynamics, the Wikipedia global social movement is detached from market-driven and sectionalised frameworks.Unlike alternative media activism, which criticises the dominant media and overthrows the mainstream epistemology, the motivation behind participants joining Wikipedia's global social movement is the postmodern values of open-source culture, fun-loving linkages, and self-actualisation.From the perspective of social movement goals, the "participatory" nature of Wikipedia's global social movement, although limited, is in a process of constant change, which this paper refers to as "protopia".</p>
+                            </div>
+                        </div>
+
+                        <div class="paper-item">
+                            <div class="paper-title">Opportunities and Challenges of China's Foreign Communication in the Wikipedia</div>
+                            <div class="paper-authors">Gan Lihao, Weng Binting</div>
+                            <div class="paper-abstract">As the Internet encyclopedia platform with the greatest global communication power and influence, Wikipedia, on the one hand, brings new opportunities foe China to broaden its external communication path, establish its image as a great power, and enhance its international voice. On the other hand, it also brings challenges to China's external communication work. The opportunities are as follows, such as providing a good opportunity for China to adapt to the restructing of the global communication pattern; offering an international platform for China to "tell a good Chinese story"; creating chances for Chinese netizen to better integrate into the international community, etc. The challenges are as follows: Wikipedia entries have a lot of prejudices and misunderstandings about China; Chinese-related issues are not systematically organized and maintained in multilingual Wikipedia; the Wikipedia community lacks influential Chinese-friendly online editors; and the traditional mode of external communication discourse can not adapt to the Wikipedia community. Based on this, it is urgent for China's external communication to encourage netizen to participate in the editing activities of Wikipedia platform, actively train Wikipedia opinion leaders, and tell China's stories while abiding by international discourse rules.</div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Research on Wikipedia's Factual Construction from the Perspective of Actor Network Theory</div>
+                            <div class="paper-authors">Fei Wenwen</div>
+                            <div class="paper-abstract">
+                                <p>Since its birth in 2001, Wikipedia has been regarded as a representative work in the era of Web2.0 using public collaboration and collective wisdom. As one of the world's largest and most visited knowledge production and dissemination sites, Wikipedia has always been regarded as a corpus of knowledge. Different from traditional static websites, the content of Wikipedia entries is updated in real time by editors from all over the world, presenting a dynamic knowledge encyclopedia.</p>
+                                <p><br>Throughout the history of page editing in the English Wikipedia entry " ChinaUnited States trade war ", the entry editing is not always in a smooth and stable state,but continuous development and change. The content of the item has undergone a major change, and the content of the item and the tendency of the subject have changed significantly before and after the change. Specifically, since the entry was created on April 7, 2018, a relatively complete entry article was formed around December. Since then, although some modifications and additions have been experienced, the general structure and content of this item have been maintained for several months. Until the end of May 2019, the content of the entry was criticized by many editors for lack of neutrality, which triggered a public discussion to restart the article. Subsequently, the relevant editors made new revisions to the content, theme, framework, information source, etc. of the entry. It can be said that from December 2018 to May 2019, the English Wikipedia entry " China-United States trade war " first completed a relatively comprehensive construction, with a very obvious "partial US tendency". After several months of restructuring, the neutrality of the entry has been adjusted to a great extent. So, how exactly does this process happen? Why did it cost months of time? What role do actors, including editors, play? Based on the actor network theory and the use of network ethnography and discourse analysis methods, this article dynamically sorts out the editing history and controversial discussions of the English entry " China-United States trade war " from December 2018 to June 2019. During the period, the English Wikipedia entry " ChinaUnited States trade war" has undergone development and changes, and the rhetoric strategies used by the actors have influenced the construction and deconstruction of the facts of the entry.</p>
+                                <p><br>The study found that Wikipedia, as the world's largest digital encyclopedia, has never been a definite and stable factual presentation, but a dynamic knowledge constructed by many users, administrators, robots, platform mechanisms and other actors through translation behavior. In the Wikipedia entry, in order to complete the factual construction of the entry, the actor first will translate the facts understood by the individual into the entry facts, expressing their understanding of the events involved in the entry. Since then, due to the different positions of actors and inconsistent views, the translation behavior also conflicted. Actors will interact and form alliances with each other to maintain the alliance's views and facts. The facts or knowledge constructed by the editors of every entry in Wikipedia are translated from this network of actors.</p>
+                                <p><br>This research not only focuses on the core roles of human actors such as administrators and editors in the construction of item facts, but also considers the important role of robots and platform rules as non-human actors. The core human actor is the leader of the construction of the facts of the item, and the non-human actor plays a more guiding and normative role.</p>
+                            </div>
+                        </div>
+
+                        <div class="paper-item">
+                            <div class="paper-title">A Study on Knowledge Dissemination of Wikipedia from the Perspective of Feminism     </div>
+                            <div class="paper-authors">Lin Shan</div>
+                            <div class="paper-abstract">
+                                <p>Wikipedia is one of the greatest examples of collaboration in human history. Anyone can edit Wikipedia for free. Anyone can contribute to Wikipedia's efforts to collect the world's knowledge, which has become "the sum total of all human knowledge in the world". Twenty-one years after its birth, Wikipedia remains one of the most comprehensive and important intellectual resources on the Internet, but there is still a serious systemic gender bias. This paper traces the establishment and development of Wikipedia from three perspectives, includes the establishment of wikipedia platform, text compilation and community operation, and finds that Wikipedia is no different from those traditional encyclopedias, which is a male-centered knowledge encyclopedia compiled by men. In Wikipedia, in terms of the gender of editors and administrators gender and entry content, men and the topics of knowledge that men are interested in are overwhelmingly. Women who are willing to collaborate are kept out of Wikipedia's knowledge editing activities by the "invisible" technical barriers and the "misogynistic" culture. In Wikipedia, the main editors of knowledge are men, which means that men's views and attitudes largely determine how information is organized, framed, and written. Wikipedia is actually producing and delivering "the totality of male knowledge."</p>
+                                <p><br>Addressing the gender imbalance in Wikipedia is a start. Under the influence of feminism, there are also many expressions and practices against male-centered discourse in Wikipedia. This paper selects nine cases of knowledge dissemination practices of Wikipedia, which are full of feminist style, takes discussion records and page editing history as materials, from the three aspects of digital movement, editing behavior, symbol and discourse strategy, to analyse how feminism influence the spread of wikipedia's knowledge, and how feminists are engaging in compilation practices and discourse practices in Wikipedia to counter the spread of male-centric knowledge.</p>
+                                <p><br>Through the diachronic process of the practice and development of feminist digital movement in Wikipedia, it is found that feminist editors use Internet technology and platforms to generate connections and dialogues on a global scale, and cut in from different perspectives through the continuous "Edit-a-thon" campaign to increase the knowledge coverage and representation of women in Wikipedia. In the practice of editing articles, feminist editors launch "editing wars" to include women and women-related topics in Wikipedia, and question the applicability and rationality of Wikipedia's "Deletion policy" and " notability guideline". In the practice of symbols and discourse strategies, feminists pay attention to the use of words, pictures and narrative strategies, advocate the use of gender-neutral language, resist the male gaze and stereotyping of female images in Wikipedia, and overturn the patriarchal narrative mode of knowledge dissemination in Wikipedia. The process of discourse practice and revision traces are faithfully preserved in Wikipedia, reflecting the influence and changes of feminism on the production and dissemination of knowledge in Wikipedia. However, in the in-depth description and analysis of the above cases, it can also be found that feminists' practice of fighting against the dissemination of sexual knowledge in Wikipedia is still within a space established by men and follows the rules formulated by men, which is more like "dancing with shackles". They fail to break the shackles of male domination and construct real "female knowledge" and "female discourse".</p>
+                            </div>
+                        </div>
+
+                        <div class="paper-item">
+                            <div class="paper-title">International Conferences on Wikimedia in the Perspective of Interactive Ritual Chain Theory</div>
+                            <div class="paper-authors">Ding Yao</div>
+                            <div class="paper-abstract">
+                                <p>The Wikimedia International Conference is also known as the ‘Wikimedia Conference’, which translates as “Wikimania”, meaning ‘Wikimania’.The conference is organised by Wikimedia volunteers from different geographic and cultural backgrounds, and focuses on Wikimedia projects such as Wikipedia, Wikimedia education, Wikimedia technology, and cultural preservation. Unlike general conferences, Wikimedia International emphasises the construction of offline real spaces and face-to-face interaction between participants. Continuing the idea of open source and free access to the sum of human knowledge for all, Wikimania uses the conference topics as a bridge to realise the diversity, equality and open source of Wikimedia projects, and interacts with the participants in the venue, so that the idea can be put into practice. 2005, the first Wikimania was held in Frankfurt, Germany. Based on the deep soil of Wikipedia, Wikimedia International Conference is not only an important place for Wikipedians to interact with each other offline, but also a growing social landscape under the power of Wikimania and Wikimedia movement. Under the mechanism of community dynamics, a group of idealists constructed the conference on their own. This paper tries to explore the intrinsic characteristics of the social landscape of Wikimedia International from the perspective of the interaction ritual chain, and on the basis of this, to extract the positive features of Wikimedia International as a social landscape, to trigger new thinking about the interaction ritual chain theory and landscape theory, to inspire the public's understanding of the positive landscape and try to participate in the practice of the positive landscape on their own initiative.</p>
+                                <p><br>This paper focuses on the research methodology of virtual ethnography. In the first step, we went deep into the communities related to the Wikimedia International Conference to record and analyse the basic situation of the Wikimedia International Conference as a social landscape by using the content of the conference, conference discussions, participants' blogs, news media reports and other text, audio and video as the sources of ethnographic materials, and found that the conference was organised by volunteers without pay, the audience participated on their own initiative based on their interest, and the conference was financed by free donations, which laid the foundation for the landscape to continuously grow and exert a positive social impact. It is found that the conference is organised by volunteers based on their interests and funded by donations. The second step is to analyse the construction of the Wikimedia International Conference using the Interaction Ritual Chain Theory framework on the basis of the existing data. It is found that, under the influence of the elements of physical co-presence, unity of focus, and shared emotions, the social landscape presents the results of interaction rituals in terms of group solidarity, shared symbols, positive emotional energy, and ethical solidarity, and the results of interaction rituals are also reflected in the positive effects of the inherent operating mechanism of the landscape. The results of the interaction rituals are also positive, and the Wikimedia International Conference can be regarded as a positive social landscape. This leads to a number of theoretical considerations. Firstly, this study re-examines the role of physical presence in interaction rituals and finds that physical presence is irreplaceable, and that emotional energy, as the key to interaction rituals, can provide a rationalisation for the altruism of the Wikimedia movement. Secondly, the Wikimedia International Conference, as a landscape practice, confirms the existence of positive landscapes and shifts the strategy of escaping from the social control of landscapes from a psychological revolution to a practical revolution, emphasising the subjectivity of human beings and dispelling the controlling role of landscapes. Finally, the Wikimedia International Conference was formed under the collaborative mechanism of community interest groups, and subject to the constraints and supervision of community forces, and promoted by idealists committed to knowledge sharing, it became the curator and ideal country of the intellectual freedom movement.</p>
+                            </div>
+                        </div>
+
+                        <div class="paper-item">
+                            <div class="paper-title">Wikipedia Knowledge Production in the Age of LLM: Opportunities, Challenges and the Future</div>
+                            <div class="paper-authors">Gan Lihao</div>
+                            <div class="paper-abstract">With the rise of Large Language Model (LLM), the field of Wikipedia knowledge production has witnessed a new transformation.This paper explores in detail the positive impact of big language models on Wikipedia knowledge production and their potential challenges.On the one hand, big language models have significantly improved the efficiency of Wikipedia knowledge generation and dissemination by adapting to the Cunningham's Law of Wikipedia communities, providing round-the-clock support for newcomer knowledge training, and correcting systematic biases in knowledge production through domain-based construction strategies.On the other hand, the big language model poses serious threats to the verification, legitimacy, values and ecology of Wikipedia knowledge through the phenomena of disillusionment, copyright risks, digital exploitation, and the intensification of the trend towards the "dead Internet".Based on this, the central role of human cognitive experience in guiding the development of LLM technology should be strengthened in the future, and solutions should be explored through practice, with a view to achieving a harmonious symbiosis and common progress between LLM knowledge production and Wikipedia knowledge production.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第二章 -->
+                <div class="chapter" id="chapter2">
+                    <h3 class="chapter-title"><i class="fas fa-cog"></i> Volume 2: The Self-Organizing Mechanism of Open-Source Knowledge Production in Wikipedia</h3>
+                    <p class="chapter-desc">Focusing on the various activities in Wikipedia, this section attempts to answer the question: how to understand the knowledge in Wikipedia.</p>
+                    
+                    <div class="papers-list">
+                        <div class="paper-item">
+                            <div class="paper-title">Mosaic Knowledge: Wikipedia from the Perspective of Environmental Drama Theory</div>
+                            <div class="paper-authors">Gan Lihao, Wang Hao</div>
+                            <div class="paper-abstract">With the emergence of intemmet open source community,human knowledge production groups began to spread from theelite to the general public,which led to significant changes in the knowledge form and knowledge production mode of human encycopedias. This paper first analyzes the text ofthe "Lao Tzu" entry in English Wikipedia,and finds that the knowledge of Wikipedia is amosaic. Then,taking "dramatic behavior" as the theoretical core,and drawing on Shaykner's“environmental drama theory" to observe the bee like knowledge production process of the interesting group of Wikipedia's "Lao Tzu" entries,the paper analyzes the space utilization,role positioning,drama group formation and discourse power distribution in the compilation behavior of the "wiki pegroup one by one,and further reveals the internal mechanism of the formation of mosaic knowledge. from the perspective ofople"nistorica sources.the Cvber culture of mosaicknowledge productionand Scheckner's environmental drama theory have the same spiitual core. They both originated from the counter mainstream cultural movement and the new commune movement in the 1960s inthe United States,which believed in transparency,integrity and shared values.</div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Knowledge Construction of Internet Encyclopaedias in a Spatial Perspective</div>
+                            <div class="paper-authors">Gan Lihao, Hujie</div>
+                            <div class="paper-abstract">In addition to being examined from the perspectives of power, capital, technology and history, human knowledge construction can also be analysed in a spatial perspective.Space is not only a material concept, but also a cognitive and social one.Unlike the previous study of "geography of knowledge" from the perspective of material space, the thesis examines the "one-child policy" entries in Wikipedia and Baidu Encyclopedia from the perspective of cognitive and social space, and finds that they construct very different knowledge landscapes, i.e., the "political culture" and the "political culture" and the "political culture" and the "political culture" and the "political culture" and the "political culture" and the "political culture" and the "political culture".Under the joint action of three forces: "political culture", "platform funding" and "community groups", the knowledge production and dissemination of Internet encyclopaedic entries show the following patterns: "Knowledge circle", "knowledge society", and "social space".Under the combined effect of the three forces of "political culture", "platform funding" and "community groups", the knowledge production and dissemination of Internet encyclopaedia entries show the distinction between "knowledge circles".This also directly leads to the differences between the "knowledge frames" of Internet encyclopedia entries.Knowledge frames" and "knowledge circles" can make up for the insufficiency of the material concept of "geography of knowledge", and together they provide the basis for the "Internet encyclopaedia".Together, they provide a new conceptual tool for the spatial analysis of knowledge in the Internet Encyclopaedia.</div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Framing Digital Discourse in the Wikipedia Encyclopaedia</div>
+                            <div class="paper-authors">Gan Lihao, Guan Yonglu, Fei Jin</div>
+                            <div class="paper-abstract">Wikipedia is not only a knowledge storage platform and information dissemination platform, but also a social media platform, and it is generally believed that its universal collaborative editing model can effectively resist the control of power and capital, and has neutrality.However, a critical discourse analysis of the English Wikipedia entries on the London 6-3 incident and the Kunming 3-1 incident reveals that although both describe the incident of "extremists hacking passers-by with knives", they construct two very different types of discourses: "terrorism" and "nationalism" respectively."nationalism" respectively.By comparing these two frames, it can be found that although the English Wikipedia entry basically adheres to the rules of international discourse, such as factual presentation and balanced reporting, it is still unable to break away from the narrative logic of the Western discourse, which creates an unfavourable national image of China.</div>
+                        </div>
+
+                        <div class="paper-item">
+                            <div class="paper-title">Research on Human-Bot Society in Wikipedia Under the Recognition Theory</div>
+                            <div class="paper-authors">Gan Lihao</div>
+                            <div class="paper-abstract">Wilkipedia is one of the most important human-bot societies in the metaverse. The human-bot society can be observed fom the perspective of both "technology politics" and "recognition politics" . Under the effect of Pygmalion complex,the human-botsociety in wikipedia has experienced four stages including technology recognition,community recognition,policy recognition and vaue recognition. Although there is no psychological basis like human self-recognition and empathy, wiki bots are given the same action goal as humans, namely,compiling a high-quality Wikipedia. Guided by this goal,Wikipediansand wiki bots have assumed differentsocial roles,rights and obligations,and recognized each other in complementary collaborative compilation. The humanbot communityhas subverted the realistic premise of the previous "recognition theory" based on the human community. interpreting the human-bot recognition behavior in the meta universe from the perspective of "social role" can further expand the connotation and scope of he application of "recognition theory".</div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Knowledge and Discoursive Power: Group Compilation of Wikipedia Robots</div>
+                            <div class="paper-authors">Gan Lihao, Liu Xinyu</div>
+                            <div class="paper-abstract">There is a collective self-organizing online community in Wikipedia. ln this community, not only are there many human gioups from different countries, nationalities, cultures and inguistic backgrounds, but also a large number of bots with different functions, status, purposes and responsilbilities. These humans and bots work together to maintain the Wiki community and improve the guality of Wikipedila entries through writing, modifying, discussing, fghting, compromising, and cooperating. in the process of entry ompilation, these bots are not only enhancers of human power, but also actors with independent accounts. On the one hand, humanusers set a strict compilation threshold on these bots, On the other hand, these bots rely on the phvsical power given by virtual spacethe identity power given by the Wiki community, and the algorithm power given by Wiki platform. in the process of knowledge production, preservation, classification and distribution, the machines' unique cognitive experience is gradually generated, and at the same time, "anthropocentrism" is being dispelled.</div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Opening "A New Era": A Study on Robot Involving in the Wikipedia Knowledge Compilation</div>
+                            <div class="paper-authors">Liu Xinyu</div>
+                            <div class="paper-abstract">
+                                <p>As an example of “knowledge collaboration”, the collective intelligence of human beings has long been considered as the basis for the success of Wikipedia. However, except for human editing, robot editing also occupies a vital position. These robots are not supposed to exist at the beginning of Wikipedia’s foundation, they involve in Wikipedia’s knowledge production in a way similar to “species invasion” and write knowledge all over the world with human beings. By studying the history, reality, and influence of Wiki’s robots, this paper discoveries that the positioning of these robots in Wikipedia is different from other tools. They present a sort of “quasi subjectivity”. A distributed editing network is formed through the cooperation between robots and human beings in specific links of knowledge compilation, which fundamentally changes the knowledge production system of Wikipedia and ushers in a “new era” for Wikipedia.</p>
+                                <p><br>Taking the robots of Wikipedia as the research object, and taking the discussion records left by Wiki’s users and the editing history flow diagram of Wikipedia system as materials, this paper adopts the methods of text analysis, case analysis and ethnography to probe into how robots involve in Wikipedia and how their involvement changes the knowledge production system of Wikipedia. This paper first explores the diachronic process of the robot’ involvement in Wikipedia. It is found that in general, the robot has undergone three identity changes: from the suspected anonymous, the widely-discussed controversial, to the legalized one recognized by the community. The robot has experienced the process of “socialization” of Wiki. In this process, the robot has encountered many obstacles, mainly focusing on technical and conceptual level. Technically, there is a conflict between the high-speed, fast and large-scale production characteristics of the robot and the knowledge editing characteristics of Wikipedia, which are small iteration and constant modification, resulting in the failure of the system function; Conceptually, there is a contradiction between the mechanical attributes of “technical artifacts” and the humanistic attributes involved in the compilation of encyclopedia knowledge, causing dissatisfaction among some community users. The involvement of robots caused an intense debate between the two major factions in the community, namely “deletion faction” and “inclusiveness faction”. Finally, the victory of “inclusiveness faction” declares the legalization of robot identity.</p>
+                                <p><br>After involving in Wikipedia, robots participate in knowledge production in Wikipedia together with human editors. Starting with the four links of knowledge production, the specific situations in which eight robots participate in knowledge production are selected to investigate in this paper. It is found that robots and humans interact, influence and depend on each other, forming something similar to the “distributed cognitive system” mentioned by Hutchins. The specific performances are as follows: the robot transforms the system problem into language to human beings, which is represented as a kind of technical cognition judged by data, and human beings make decisions in accordance with their own experience, which is represented as a kind of empirical cognition through subjective judgment. The integration of empirical cognition and technological cognition ultimately determines the externalized operation result, and the superposition of the two forms the “man-robot intelligence” on Wikipedia, driving the editing, production and management of Wikipedia knowledge. In this process, the two show two distinct qualities of competence. Meanwhile, these robots have also brought new changes to Wikipedia: Through the production, modification and censorship of knowledge, they give full play to their own unique voice; As a technological order, robots make loose rules irresistible, and then discipline the behavior of human users; Through the existence of this special identity, which is similar to but different from human beings, the fundamental distinction between robots and human beings is blurred and “anthropocentrism” is dispelled.</p>
+                            </div>
+                        </div>
+
+                        <div class="paper-item">
+                            <div class="paper-title">A Study on the Creative Commons Movement of Wikipedia under the Regulation of Intellectual Property</div>
+                            <div class="paper-authors">Jing Chuyan</div>
+                            <div class="paper-abstract">
+                                <p>There is both a natural conflict and a symbiotic tension between knowledge sharing and intellectual property. In the era of the Internet, the development of media technology not only innovates knowledge production methods, but also breaks the foundation on which the intellectual property system of the industrial era relies for survival. The relationship between intellectual property and knowledge sharing is receiving increasing attention from the academic community.</p>
+                                <p><br>At present, academic research on the relationship between intellectual property and knowledge sharing focuses on the perspective of the opposition between knowledge protection and sharing, with one party as the subject and the other as the object, analyzing the difficulties and solutions of intellectual property protection or knowledge sharing openness, in order to achieve a balance between private and public rights. This is a static analysis of the relationship between the two, which is of great significance. However, protection and sharing are not binary opposites, nor are they unrelated parallel developments. Previous research has overlooked the dynamic process of intellectual property rights and knowledge sharing as common entities, colliding and playing games with each other to achieve a balance of interests.</p>
+                                <p><br>As a successful example of knowledge sharing in the Internet era, the knowledge sharing movement of Wikipedia has successfully presented us with a new information production model. Its emergence challenges the monopolistic incentive innovation model under the intellectual property system framework, promotes freedom of knowledge, and also proves the feasibility and functional value of "intellectual property without intellectual property", playing a role in promoting knowledge innovation and cooperation. This article takes the knowledge sharing movement of Wikipedia as the research object, and uses methods such as historical analysis, online ethnography, and case analysis to explore the process of realizing knowledge sharing of Wikipedia under the regulation of intellectual property system from three aspects: VIthe birth, survival, and struggle of the knowledge sharing movement of Wikipedia.</p>
+                                <p><br>Research has found that the Wikipedia Encyclopedia is not completely opposed to the intellectual property system in the knowledge sharing movement. It follows intellectual property law and seeks protection of the law and avoids intellectual property infringement disputes through an orderly, wiki based, and standardized community mechanism. At the same time, in the face of the unlimited expansion trend of the intellectual property system, Wikipedia has taken active measures.</p>
+                                <p><br>Through consultation, dialogue, advocacy, and action, Wikipedia attempts to exert influence on the intellectual property system in the Internet era, in order to fight for legal space for its knowledge sharing movement.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Convention and Game: Naming Politics in the Compilation of Collective Self-Organizing Knowledge in Wikipedia</div>
+                            <div class="paper-authors">Gan Lihao</div>
+                            <div class="paper-abstract">Naming is not only a symbolic referential act that connects the signifier and the signified,but also a political and social meta-discourse act.Unlilke traditional encyclopedias,which rely on experts and scholars for naming,wikipedia has established a collectie naming system through online communities' self-organizing norms.On the one hand,the wiki community reaches consensus on codification through aareement.On the other hand it stratedically resorts to varnious codification auidelines,supervisions.and punishmenimechanisms,as well as dispute resolution procedures,and engages in a long-term and arduous struggle for the naming right in the gobal knowledae system,Based on the four aspects of community aareement.community supervision.community aritration and community game,Wikipedia has built its self-organizing naming mechanism.The paper combines the theoretical perspectives of self-organization innovation system and game strategy analysis.t suggests a new path to understanding naming politics.</div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Disambiguation Struggles: Knowledge Dissemination in Wikipedia's Digital Space</div>
+                            <div class="paper-authors">Gan Lihao, Fei Jin, Jing Chuyan</div>
+                            <div class="paper-abstract">The phenomenon of disambiguation is not only related to semantics and information technology, but also closely relatedto rhetoric and political science. By analyzing the disambiguation behavior of English entries involving "Macedonia", we can find thatthere is a digital space with limited resources in Wikipedia. in this space, the Wikipedia community cannot form consensus knowledce through rational discussions. By examining the phenomenon of disambiguation struggles in "search navigation space","page sorting space" and "map visual space", this article rethinks the presupposed conditions of Habermas' s "ideal speech situation" and distinguishes the legitimation of Wikipedia knowledge of two space types, Different from previous approaches of the main receptor symbocommunication, cultural ideology and technological sociology, this article provides a new analvtical perspective for the study of Wikipedia knowledge communication from the perspective of spatial sociology.</div>
+                        </div>
+
+                        <div class="paper-item">
+                            <div class="paper-title">Redirection Game: A Study of Knowledge Construction in Wikipedia</div>
+                            <div class="paper-authors">Li Juan</div>
+                            <div class="paper-abstract">
+                                <p>In the human knowledge reference system, there are often different names that refer to the same thing. For example, Beijing and Peiping both refer to the capital of China, which leads to a difficult problem that the large Internet encyclopedias have to deal with: How does the encyclopedia platform link different names into the entry of the same thing when users with different language habits search by different names or words? In order to solve this problem, Wikipedia uses a computational link technology to redirect different web search requests to a unique location agreed by the platform community, which also causes a series of community discourse power struggles, that is, in the practice of redirection compilation, for multiple names of the same thing, which names deserve to be created for redirection? Which entry should it lead to after creation? From this, we can see that redirection is not only a technical mechanism of large databases, but also closely related to community negotiation, game and agreement. In other words, redirection is not only a scientific and technical term, but also a political game term.</p>
+                                <p><br>Therefore, from the perspective of political game, this paper first examines how Wikipedia community negotiates, talks and compromises for a long time to agree on the compilation policy of redirection. Secondly, this paper explores how the Wikipedia community strategically uses the redirection policy to serve its own knowledge legitimacy by taking Afghan related articles in Chinese and English Wikipedia as an example. Finally, on this basis, this paper rethinks Berger's theory of knowledge sociology, and further discusses the methods and characteristics of human knowledge construction in the digital age.</p>
+                                <p><br>It is found that Wikipedia redirection is not only a transparent pure technology tool, but also a product of social construction and political game, which has participated in shaping the largest human Internet encyclopedia -- Wikipedia. On the one hand, Wikipedia establishes the community specification about redirected editing through the self-organizing specification of digital community. On the other hand, the wiki community strategically resorts to redirection rules to compete for intellectual legitimacy. Based on the redirection rule convention and the redirection application game, the redirection politics is established. The knowledge construction methods of redirection politics include establishing rules, modifying editing and maintaining authority. The construction of digital knowledge by redirected politics is reflected in the following ways: constructing public knowledge by building correlation structure and reconstructing the concept of socialization; Updating the concept of "institutionalization" by establishing rules and auditing mechanisms; The concept of "justification" is supplemented by built-in discussion and declaration of consensus.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">The Collaborative Editing by Attribution Theory on Wikipedia and Baidu Baike</div>
+                            <div class="paper-authors">Zhang Haili</div>
+                            <div class="paper-abstract">
+                                <p>Before the birth of Wikipedia, the traditional English Encyclopedia Dictionary was the way for people to acquire knowledge. In 2001, Sanger created a new form of Encyclopedia dictionary. This form of encyclopedia created by the Internet is based on Wikipedia technology. It has obvious characteristics of free, open and collaborative editing. This paper focuses on how to write and edit social conflicts in Wikipedia. The selected case is the "March 14" incident in Tibet, which happened in the streets of Lhasa and in Qinghai, Gansu, Sichuan and Yunnan in March 2008. The incident attracted a lot of attention both at home and abroad in 2008, and the relevant entries have been revised repeatedly so far.</p>
+                                <p><br>This study uses qualitative discourse analysis to make a comparative study of the English Wikipedia "3.14" entry text and Baidu Encyclopedia's same entry text. It is found that the attribution characteristics of Chinese and foreign entries are significant in the process of collaborative editing. Attribution is an important theory originating from social psychology, which explains why individuals in daily life do things to seek their own and other people's behavior. Through the analysis of the text at the lexical, clause and textual levels, it is found that although Wikipedia entries attribute some of the reasons to criminals, more texts attribute events to the domestic social background of China, and the reasons are stable and uncontrollable. In contrast, Baidu Encyclopedia entries'attribution framework for the "3.14" incident is that foreign forces led by the Dalai Lama Group participate in the planning, because of external, controllable and stable reasons.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Norms and Strategies: The Principle of Neutrality and Collective Knowledge Building in Wikipedia</div>
+                            <div class="paper-authors">Li Jingxian</div>
+                            <div class="paper-abstract">
+                                <p>Wikipedia has always had a reputation for being neutral, and neutrality is not only the basic rule of wikipedia, but also one of its pillars. Wikipedia founder Jimmy wales, editor in chief larry sanger, and wikipedia's web editors' interpretation of wikipedia neutrality form part of wikipedia's policy of neutrality principles, which aim to keep the content of articles written by editors neutral. However, this paper finds that in the process of editing, editors use the specific requirements of the policy against each other, so that the neutrality policy becomes a tool for editors to serve their own views.</p>
+                                <p><br>This article selects a wikipedia entry on military conflict, taking the 2017 China-India border standoff as an example. From the perspective of neutrality, using discourse analysis and ethnographic research methods, this paper explores how web editors used the neutrality principle of wikipedia to edit the "2017 China-India border standoff" article. Article first explores the concrete requirements of wikipedia neutrality principle and forming process, and then from the "build" reality, "media quoted object", "core topic discussion" three aspects to show how wikipedia web editor using the principle of neutrality policy behavior of editing, and about 2017 China-India border standoff in the entry "key editors" editing behavior is analyzed.</p>
+                                <p><br>This article found that when editors edit articles using the wikipedia neutrality principle, they use it selectively, making it a tool to remove opposing views or to preserve their own. At the same time, some unclear provisions in the neutrality policy allow editors to edit according to their own understanding in the specific use process, which leads to the neutrality principle becoming a tool for editors to serve their own ideology. In the process of editing, editors not only conduct their editing activities according to the existing neutrality principle, but also form a new neutrality consensus in the specific editing process, which is once again used to serve their own views.</p>
+                            </div>
+                        </div>
+
+                        <div class="paper-item">
+                            <div class="paper-title">Objective Principle and Knowledge Architecture of Wikipedia</div>
+                            <div class="paper-authors">Wu Di</div>
+                            <div class="paper-abstract">
+                                <p>The principle of objectivity has experienced numerousquestions and criticisms during its development, but it is still an indispensable principle in the process of knowledgearchitecture. At conceptual level, the principle of objectivity is the professional beliefs and goals of the communities of knowledge architecture and knowledge architects. Atpractical level, the principle of objectivity is the editing principle and narrative framework in the process of knowledge output. The principle of objectivity has multiple meanings and different opinions in different media, so it has a certain degree of flexibility. This allows the principle of objectivity to absorb and include different practices, and provides different social and cultural groups with an opportunity to enter the public domain to convey values.</p>
+                                <p><br>As a platform to produce collaborative knowledge, Wikipedia's principle of objectivity includes "Neutral point of view", "Verifiability" and "No original research". This article considers the principle of objectivity as a system and culture of knowledge output, and selects the English version of " Belt and Road Initiative " entry in Wikipedia as a case study to explore the role of objective principles of Wikipedia in the " Belt and Road Initiative " entry community.</p>
+                                <p><br>The study found that in the controversial debates of the Wikipedia “Belt and Road Initiative” entry community, editors with different positions would use the principle of objectivity as a rhetorical resource to justify their stands. Judging from the process and results of the controversial debates, the practice of the principle of objectivity in Wikipedia reflects some of the internal mechanisms of Wikipedia knowledge architecture: the principle of objectivity is not necessarily the primary principle of its knowledge output; the principle of objectivity introduced by the officials needs to be supplemented and improved; some policy principles provide a large "operation room" for biased editors due to its "fuzziness". These internal mechanisms have an important impact on the knowledge architecture of Wikipedia. As Wikipedia is an important platform for China's external communication, China should also adapt its mechanism to participate in Wikipedia's knowledgearchitecture. Therefore, this article attempts to make some suggestions for Chinese Internet users to participate in Wikipedia for external communication, in order to provide reference value.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Consensus and Tactics: A Research about the Balance of Wikipedia</div>
+                            <div class="paper-authors">Weng Binting</div>
+                            <div class="paper-abstract">
+                                <p>At present, the influence of Wikipedia has gradually surpassed a great deal of media such as CNN and BBC. Wikipedia has become an important channel for people to search for information and learn about new things. What’s more, it brings new opportunities for China to broaden its external communication path. If we want to make full use of Wikipedia for external communication, we need to master its editing principles. The balance principle is one of the important editing principles on Wikipedia. As we know, the concept of balance is similar to the other two concepts (objectivity and neutrality), but they are different. Therefore, this thesis aims to study the balance principle of Wikipedia as a way to deepen the understanding of the concept of balance.</p>
+                                <p><br>This thesis focuses on the balance principle of the Wikipedia, combining the methods of online ethnography, text analysis and case study, etc. This thesis analyzes the principle of balance and explores the basic connotation of the concept of balance from the two perspectives that are policy stipulation and practical application. It is found that the balance principle in Wikipedia policy, which can be divided into text balance principle, image balance principle and external link balance principle, is the consensus reached by Wikipedia users under long-term discussion and revision. Therewith, this paper summarizes the three main points of the concept of balance on Wikipedia. They are balance elements including value such as prominence and importance in reliability sources and so on, position including source attribute and language type, the balance relation including the equaling balance and the unequal balance on Wikipedia.</p>
+                                <p><br>In addition, the principles of balance are also kinds of strategy for editors to discuss text, transmit values on Wikipedia. This paper examines the use of the principles of balance by English Wikipedia users with some examples including  China–United States relations and Genetically modified food, etc. Then, the basic attributes of balance are summarized. One is that the relation among the elements of balance is one of unity of opposites.And the other is that the elements of balance change all the time but the balance relationship is always the same.</p>
+                                <p><br>Finally, after analyzing the influence of various social factors on the balance principles, this thesis finds that the connotation of the balance principles depends on the driving force of the social factors ,which always constrains the development of the balance principles.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Research on Credibility Construction of Wikipedia Information Source</div>
+                            <div class="paper-authors">Xin Huijun</div>
+                            <div class="paper-abstract">
+                                <p>Wikipedia, the world's most popular online platform for collaboration and knowledge dissemination, relies on reliable references for its articles . Therefore,Wikipedia takes "Reliable Sources" as the content guide in the process of editing entries. During the establishment of this guide, Wikipedia's knowledge producers need to use their own discourse rhetoric strategies to construct the credibility evaluation index of Wikipedia's information sources, so as to improve their own persuasive production of knowledge content.</p>
+                                <p><br>This paper firstly combs out the origin, development and stability of Wikipedia's "Reliable Source Guide", and clarifies the specific rules of Wikipedia's reliable source construction.Wikipedia editors regard "published""independent" "reputable" and "fact-checking" as signs of a credible source,and construct specific information source credibility grades in the discussion.Then, from the perspective of media credibility research,  based on the editorial discussion texts on media credibility of "Russia Today" and "Radio Free Asia",the paper carries out comparative analysis from the sources of news, reporting content, communication motivation, funding sources and other multi-dimensions.The editors argue that RT's extensive use of official sources is controversial, and its coverage contains disinformation and opinion bias, which is a state-controlled propaganda tool that should be "discarded" from Wikipedia.For RFA, Wikipedia editors argue that anonymous sources make up for official information, and disseminate "objective facts".Being a state-funded but independent information exchanging platform,it is "generally reliable".The fact that RT and RFA, both government-funded media outlets, presenting opposite credibility ratings on Wikipedia,seems at odds with the criteria set by the “Reliable Sources Guide”.</p>
+                                <p><br>The study found that,since Wikipedia's criteria for "reliable sources" is difficult to measure objectively, Wikipedia editors have a wide rhetorical space when constructing the credibility of information sources.The differences in the credibility of RT and RFA in Wikipedia appears to be the result of an editorial vote, but Wikipedia editors, in this process,use strategies such as context manipulation, metaphor and issue conversion, use platform internal standards flexibly and appeal to the authority of mainstream media and the national image behind the media, which jointly create Wikipedia's criteria for judging the credibility of information sources.Therefore, the paper believes that the differences in the credibility of information sources in Wikipedia are actually the result of rhetorical construction.</p>
+                            </div>
+                        </div>
+
+                        <div class="paper-item">
+                            <div class="paper-title">Classified Game: A Study of Knowledge Construction in Wikipedia</div>
+                            <div class="paper-authors">Chen Danyi</div>
+                            <div class="paper-abstract">
+                                <p>Classification is an extremely complex scientific understanding activity, usually referring to the categorization of things according to their characteristics. As a model of "collaborative knowledge production", Wikipedia has developed a set of popular classification system and classification rules that are different from traditional taxonomy. Through categorization, Wikipedia establishes convenient navigation links between scattered entries based on hierarchical relationships, and realizes the order of knowledge. However, in the process of classification, there is also a hidden battle between discourse and power.</p>
+                                <p><br>Using the research method of web ethnography, this paper firstly composes the connotation and specific rules of Wikipedia classification, specifically elaborates on the rules of three aspects: principle regulations, structural framework, and important factors of classification, and explores the influence of paper encyclopedia classification and traditional book taxonomy on Wikipedia classification principles, and explores the balance between the rules inside and outside the classification system. At the same time, the classification rules of Wikipedia are examined over time, tracing the formation and development of the classification rules, describing the current status of Wikipedia's classification and exploring the usefulness of "classification" in constructing Wikipedia's knowledge landscape. Afterwards, we combine three typical cases: the debate on "category: female billiard player," the debate on "category: homophobia," and the debate on the categorization of the entry "acupuncture," and discuss the three levels of category creation, category naming, and entry categorization. Finally, the concept of Wikipedia category politics is defined and an attempt is made to reflect on the concept of sociology of knowledge in digital communities. summarizing the new features of the knowledge construction of Wikipedia's classification system.</p>
+                                <p><br>The study finds that a kind of categorical politics has been formed in Wikipedia, in which different ideological groups defend their own positions and fight against each other's positions by means of three categorical games: category struggle, naming struggle and structure struggle, in order to compete for the knowledge legitimacy of the Wikipedia community. In the process of categorization game, resorting to internal rules, resorting to external sources, and resorting to community differences are the common struggle strategies of users. In addition, the three stages of Wikipedia's categorical political knowledge construction present new features of reproducing institutionalized processes, updating justification procedures, and reconstructing socialized approaches.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title"> Research on Voting Mechanism of Knowledge Construction in Wikipedia Encyclopedia</div>
+                            <div class="paper-authors">Han Xiaoxiao</div>
+                            <div class="paper-abstract">
+                                <p>Wikipedia is the world's first multilingual Internet encyclopedia to support collaborative writing by communities. It advocates "everyone can edit" and "equal creation of production knowledge", breaking the elite's exclusive power and rule over the compilation of knowledge of traditional encyclopedias. Users in the wiki platform have relatively free access to information and speech opportunities. Therefore, self-organization becomes the unique order of group communication within the platform.</p>
+                                <p><br>As a matter of fact, in Wikipedia, unprofessional compilation and controversies and conflicts between different cultural backgrounds occur from time to time. It is inevitable that self-organized communities will fall into an unmanageable deadlock, which makes it difficult for the process of reaching consensus to be smooth. This is where editors need to promote better knowledge production by establishing community protocols, including voting mechanisms. Voting mechanism refers to that, in order to solve some seriously controversial issues on Wikipedia, Wikipedia users express each other's positions quickly through voting, so as to show what opinions are supported by the majority of people. At the same time, consultation and discussion are carried out to promote consensus, so as to determine the feasibility and legality of compilation and modification of the entry knowledge.</p>
+                                <p><br>At present, the academic research on voting behavior includes four influential research paths, namely, ecology path, sociology path, social psychology path and economics path. Most of these researches focus on realistic democratic categories such as election, party identification and enterprise organization. Voting behavior of digital network communities has become a blank spot in this kind of research. Therefore, through the Internet political science approach, this paper will explore in depth the voting mechanism constructed by the self-organized community of Wikipedia in order to promote the compilation of knowledge and carry out the political struggle of knowledge when encountering large controversial issues, as well as how the self-organized community uses the voting mechanism to affect the legitimacy of knowledge.</p>
+                                <p><br>First of all, based on the discussion boards, historical editing and other text materials of voting related items, this paper sorts out the voting construction mechanism of the self-organized community in Wikipedia, including the voting function of "majority voting" and "majority reference", the contradictions and disputes between voting function and dialogue function, and the consensus of voting mechanism.</p>
+                                <p><br>Secondly, although the self-organized community of Wikipedia has made regulations on voting and developed a series of voting methods, on the one hand, the voting mechanism is not a legal regulation and cannot be forced to restrict users on the platform. On the other hand, in editorial practice, Wikipedia is not a democratic testing ground, and disputes cannot be resolved solely by voting mechanisms. As a result, some editors strategically use voting mechanisms and other "codification guidelines" in the process of compiling knowledge to play games between community organizations on controversial topics and content.</p>
+                                <p><br>Based on this, this paper studies the voting mechanism of self-organized community in Wikipedia by taking the "Nanjing Massacre" item in Wikipedia as an example. After a diachronic analysis of the text corpus, this paper finds that the voting game conducted by editors in the naming dispute voting of this article is mainly reflected in three aspects: establishing discourse authority in the conflict through voting options; Use other wiki policies to weaken or strengthen voting options; Resorting to voting procedures to reshape knowledge legitimacy.</p>
+                                <p><br>Finally, based on the above analysis, the fourth chapter will take voting mechanism as a kind of community "politics" from a macro perspective, expounding its internal meaning and characteristics. In addition, in the context of Wikipedia, it summarizes the way voting politics participates in the construction of knowledge legitimacy and its influence on knowledge construction.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第三章 -->
+                <div class="chapter" id="chapter3">
+                    <h3 class="chapter-title"><i class="fas fa-rocket"></i> Volume 3: Case Studies in the Knowledge Politics of Wikipedia</h3>
+                    <p class="chapter-desc">The final section presents some case studies under the theory framework of Wikipedia Politics.</p>
+                    
+                    <div class="papers-list">
+                        <div class="paper-item">
+                            <div class="paper-title">The Production Mechanism and Legitimacy Construction of Internet Encyclopedia Knowledge: The Production Mechanism and Legitimacy Construction of Internet Encyclopedia Knowledge:</div>
+                            <div class="paper-authors">Gan Lihao, Pang Yanru</div>
+                            <div class="paper-abstract">In the Internet age, Wikipedia knowledge is an important part of human social knowledge. Its legitimacy comes from a series of ideological operations: assuming that the Internet is democratic; assuming that democracy can achieve fairness and justice; assuming that transparency can prevent manipulation; assuming that group thinking is prior to the individual thinking; assuming that the flowing content of the dictionaries can overcome the prejudice brought by space, time and culture; assuming that the editing behavior of the global netizens can achieve a true "comprehensive balance". However,from the perspectives of the text, user and platform rules, analyzing the "Senkaku lslands (Diaoyu Islands)" entry in the English Wikipedia, we can find that the main body of the item presents the characteristics of pro-Japanese, the number of pro-Japanese netizens in the editorial community greatly surpassed the pro-china netizens, and the management mechanism set by the platform could not substantially supervise the bad editing behavior of active users. On the whole, the "Diaoyu Island” entry does not achieve a true "comprehensive balance” of knowledge. In this sense, Wikipedia is not only a human knowledge storage platform, but also an international discourse struggle and negotiation platform.</div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Group Protests V.S. The Masses Will, Discourse Game on Social Conflict of Wikipedia and BaiduBaike -- In the Case of Wukan Entry</div>
+                            <div class="paper-authors">Zhang Yaqiong</div>
+                            <div class="paper-abstract">
+                                <p>Before the advent of the Internet era, encyclopedia entries are usually presented in the form of a dictionary of the editors of the academic community, in the editing process vulnerable to the rights and capital constraints, so the traditional encyclopedia entry reflects the elite ideology. With the popularity of the Internet, network encyclopedia as a key emerging information dissemination channels, has become the most convenient way to get information quickly. It is the rebellion and subversion of the elite encyclopedia entry, the purpose is to correct the bias of the elite terms, through the non-utilitarian behavior of Internet users to fight against capital and rights, therefore, the use of the Internet, It is generally believed that in the Internet age, network encyclopedia more objective neutrality.</p>
+                                <p><br>However, the network encyclopedia of the editor is by the user collaborative writing can be changed immediately, the information source is usually from the media reports, the user composition, media tendencies and encyclopedic companies will affect the neutrality? This is the focus of this topic. This paper presents the research method of the front, dle and rear regions of the Trinity, the former area is the analysis of the entry text, the analysis of the editorial users in the region, the posterior area is the analysis of the platform mechanism. Through the specific study of the events of the typical social conflict in our country, we found that the network encyclopedia entry is not as objective as we thought, and its text is obviously biased, and the netizen is not the true amp;quot; Editable amp;quot;, but with the views of leaders, the core of the level of the points, the platform is a huge corporate institutions, by the impact of capital and power is also very large, these three aspects have influenced the encyclical discourse bias.</p>
+                                <p><br>In the Wukan incident, the Baidu encyclopedia term constructs the discourse frame of the masses' willingness. The wiki is the framework of the group to resist the discourse. The image of the country is perceived, alienated, deviated or subversive in the spread of different discourse. The antagonism of the discourse framework of the network encyclopedia is a reflection of the conflict between Chinese and western discourse in the global discourse field. There is a deeper difference in the concept of discourse between the group and the discourse of the masses. It reflects the western discourse system of human rights and the discourse system of our people's sovereignty Opposition, this opposition has a negative impact on the image of our country. Based on this, it is put forward to establish a negotiated discourse pattern under the system of human rights discourse and the system of people's sovereignty. It is a discourse means to improve the opposition of the two countries. Therefore, the paper puts forward the strategy of discourse from confrontation to correction, and then gradually out of the opposition of the discourse system through the gradual way to perfect the system of discourse.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">The Ideological Construction of Taiwan's Sovereignty in Online Encyclopedia -- In the Case of Wikipedia and Baidu Baike</div>
+                            <div class="paper-authors">Zhu Weibing</div>
+                            <div class="paper-abstract">
+                                <p>International communication has always been one of the most important topic in the field of communication. And currently the rapid development of Internet brings China another chance of improving our influence internationally. Stepped into the millennium, online encyclopedia, especially Wikipedia, has become an important window of people learning new things. On the other hand, compared to professional media such as BBC and CNN, online encyclopedia does not need expensive and long amp;ndash; term investment due to its low entering threshold and the nature of grass roots. Therefore, online encyclopedia should be attached great importance to its value of international communication.</p>
+                                <p><br>Despite that online encyclopedia is a very good way to improve our say on the international stage, we have not paid it enough attention as we should for a very long time. On one hand, people neglected tons of unfavorable content on Wikipedia. On the other hand, many people didnamp;rsquo;t see how languages could influence peopleamp;rsquo;s minds. But in fact, as online encyclopedia has greatly involved in peopleamp;rsquo;s way of learning new things, also along with its worldwide popularity, it will play an important role in building up a favorable image for China among other countries. Particularly, Wikipedia covers more areas globally than Baidu Baike. For the above reasons, it is essential to study what should and should not talk about on Wikipedia and how to talk about it referring to Baidu Baikeamp;rsquo;s experience.</p>
+                                <p><br>This essay takes amp;ldquo;Taiwanamp;rdquo; article as an example, exploring how Wikipedia and Baidu Baike construct peopleamp;rsquo;s minds from the perspective of language, role and organization. With the analysis, some suggestions were given according to the above observation, especially for Wikipedia. Through discourse analysis of amp;ldquo;Taiwanamp;rdquo; article on both platforms, the paper concluded how to improve its vocabulary, grammar and discourse. After statistical judgment sampling for different editors on both platforms, it is considered that organizing senior users, tracking hot discussed topic and improving the quality of related articles are all essential. After analyzing how the two platforms operate, the paper attaches great importance to familiarity of the rules. Besides, the paper gives out suggestions about how to use the rules and tools to track active users and how to take advantage of Wikipediaamp;rsquo;s artificial intelligence so as to be more effective.</p>
+                                <p><br>In conclusion, International communication does not equal to eulogize and declaration of sovereignty does not lead to the use of force. By strengthening our voice proactively, taking the full use of internet media and civil resources，it will be great help to our international communication. Wikipedia is just a great example. After all, defend sovereignty and increase our say on the international stage through the power of language is a better way than employ force in peacetime.</p>
+                            </div>
+                        </div>
+
+                        <div class="paper-item">
+                            <div class="paper-title">Repression VS Anti-terrorism: Discourse Presentation on Terrorist Incidents of Wikipedia and BaiduBaike —— In the Case of Urumqi 7.5 Event</div>
+                            <div class="paper-authors">Zhao Mi</div>
+                            <div class="paper-abstract">
+                                <p>With the development of science and technology and the openness and convenience of the Internet environment, people can learn about a country from a variety of communication channels. For media, the encyclopedia website is also a major force in shaping the national image. The characteristics of openness, collaboration, and sharing of the web encyclopedia make it quickly become an important channel for people to acquire knowledge. What's more important is that these characteristics have changed the situation of media inequality in the past. Everyone can edit to ensure the word. The article is fair and objective, in most people's cognition, the encyclopedia platform is an objective and neutral platform. Under the background of globalization and international communication, the entry of encyclopedias as a kind of special popular discourse is of great significance to the construction of the country's image. The encyclopedic terms surrounding the discourse of the terror-related events in China are even more contestants for the right to discourse. The textual discourse of the "Urumqi 7.5 Event" entry not only has the value of providing information, but also has a significant meaning related to the construction of the national image. It may even produce a corresponding inverse construction of social reality.</p>
+                                <p><br>As a crucial information portal and presentation platform in the platform network, the network encyclopedia has an indispensable influence on the presentation and construction of the “Urumqi 7.5 Incident”. The academic community has an entry to “Urumqi 7.5 Event” in the Internet Encyclopedia. However, the impact did not get enough attention. Therefore, this study carried out research on the encyclopedia platform. This study takes the "Urumqi 7.5 Event" entry in Wikipedia and Baidu Encyclopedia as the research object, and uses the "three-dimensional" analysis method as the main research method. The three-direction degree mainly refers to the analysis of the entry text and the entry editing Historical analysis and analysis of the encyclopedia platform mechanism. Through the analysis of three dimensions, it is found that Baidu Encyclopedia and Wikipedia have different discourse frameworks and ideologies for the events. The encyclopedia websites are not objectively neutral. Text, users, and platform rules all affect the bias of the discourse.</p>
+                                <p><br> "Urumqi 7.5 Incident", Baidu's encyclopaedia discourse emphasized that ethnic separatists tried to undermine ethnic relations and incited terrorists to carry out violent acts. The Chinese government actively cracked down on terrorism, opposed separatist plots, safeguarded people’s security, and constructed anti-terrorism discourse framework. Wikipedia's vocabulary words uses a writing tool to show a very different writing path - stressing the political colors of the "Urumqi 7.5 Incident". Representatives of the Chinese government and police uses excessive violence cause ethnic conflicts. As well as the government’s human rights restrictions on the Uighur people, although the official discourse does not evade the negative content of the terrorists, it uses selective filtering to create a discourse framework for violent repression. These are two discourse frameworks also show the opposition of China’s national sovereignty and the discourse system of Western nationalities’ human rights. Based on this, the paper proposes a repair strategy for biased discourse entries, which helps us to become familiar with the international communication rules and refute the country’s national image transmission in a more targeted manner, and it also helps to strengthen the skills of autonomously setting the agenda. In the international communications such as China’s violent and terror incidents, they competed for a more favorable voice and maintained a positive image of China’s country.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">A Discourse Framework for Co-editing Wikipedia Words on Production Safety Accidents——Take 2015 Tianjin explosions and West Fertilizer Company Explosion as Examples</div>
+                            <div class="paper-authors">Liu Guan</div>
+                            <div class="paper-abstract">
+                                <p>Wikipedia is a digital publishing industry form based on collaborative editing from the perspective of publishing industry development. While from the perspective of publications'external dissemination and ideology, Wikipedia is a discourse field of among different cultures and countries. Netizens from different cultural and ideological backgrounds gather here to collaborate with the editing of entries according to their own cognitive and framework, accompanied by their own evaluation and bias. However, for a long time, this discourse field has received little attention in China. Long-term aphasia has led to more unfavorable information in Wikipedia, which damages China's national image.</p>
+                                <p><br>Our study focuses on the production safety accidents and take 2015 Tianjin explosions and West Fertilizer Company explosion as examples,trying to find out whether there is bias in editing Wikipedia's entry in such a kind of events that there is less controversial and less obvious conflicts in the international community. The article focuses on three levels: text of words, editing users and editing platform.At the textual level, through the analysis of vocabulary, sentence and discourse, it is found that the two entries show the difference of government image between risk control and crisis governance. At the editing user level, through the analysis of the source of editing users, the speech and behavior of editing users, it is found that editing users have two different editing orientations of questioning the government and restoring the facts to the two disasters. At the editing platform level, through the analysis of platform value proposition, platform usage rules and platform management level, this paper finds the logical loopholes of Wikipedia platform itself, that is, the open Wikipedia platform can not guarantee its neutrality, and there is a paradox between openness and neutrality that are difficult to reconcile.</p>
+                                <p><br>The difference between Wikipedia text and editors reflects a long-term ideological-based cognitive framework: bad governance and good governance. In Wikipedia editors' perception, China is bad governance, while the United States is good governance. However, in any case, the Wikipedia platform rules are still respected by most of editors. The value proposition of Wikipedia also opens the door for Chinese netizens to edit entries.Chinese netizens can enter Wikipedia and change the trend of editing entries which are distorted by the cognitive bias of editors. Based on this, this paper puts forward the strategy of discourse for repair of disaster entries such as Tianjin explosion entries.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">Knowledge Dissemination from an InterCultural Perspective: A Study on the Collaborative Compilationof the Wikipedia Encyclopedia "Laozi"</div>
+                            <div class="paper-authors">Zhou Xinyi</div>
+                            <div class="paper-abstract">As a global platform for the production and sharing of knowledge and culture, knowledge sharers from different cultural backgrounds in the Internet Wikipedia complete the interpretation of specific knowledge based on common interests and hobbies. Therefore, Wikipedia may not only convey knowledge, but culture itself is interpreted and disseminated in different ways as a kind of knowledge in interaction. As the thoughts of Laozi were spread overseas by Western missionaries, the thoughts of Laozi showed a multi-path propagation ecology. In the process of "Laozi" entry compilation, based on the openness and publicity of Wikipedia, various communities can create ideographic and open text collaboratively, forming a "Wikipedia-style" interpretation of "Laozi" entries from the intercultural perspective. The article first takes the "Laozi" entry texts of 137 language communities as the research object, and glides into the dissemination of "Laozi" knowledge in these more than 100 language communities from three aspects: entry title naming, entry body knowledge construction, and entry references. Path law: Respectively, it is a network of mutual transmission with English as the authoritative language, and a core divergent transmission divided by country and language family. The two together form the transmission link of "Laozi" in the Wikipedia global community. Secondly, through the comprehensive analysis and comparison of all related images of Laozi's entries, it explores the use factors of Laozi's images in cross-community dissemination. Finally, this article shifts from static to dynamic, exploring the content of the dialogue between the wiki community and wiki editors behind the community entries, and sorting out the process by which they collaborate through interaction and jointly interpret Laozi’s knowledge. Intercultural communication is the process of encountering and communicating with different nationalities, races, regions, languages, etc. ach community on the Wikipedia platform has differences in the perspective and method of compiling articles on "Laozi" due to its cultural background, editorial personal influence, etc.There is a "horizon" difference in the interpretation of "Laozi" entries, and the "horizon" of the heterogeneous cultural community in the process of dissemination is not unchanging, but in a dynamic organic process. In the process of collision with other horizons, there may be conflicts, deviations or exchanges and fusions, thus forming a new understanding, and finally forming what Gadamer said " Fusion of Horizons" together form a new cultural research horizon unique to Laozi on the Wikipedia platform. For Laozi's research, in addition to the "historical, text-oriented" classic text interpretation, try to integrate the "present, realistic-oriented" interpretations from different perspectives around the world, or find a brand new suitable and for reference the global spread of Chinese culture.</div>
+                        </div>
+
+                        <div class="paper-item">
+                            <div class="paper-title">Politics of Disease: A Study of Naming in Wikipedia——The case of Chinese and English entries involving "COVID-19" </div>
+                            <div class="paper-authors">He Yuanyuan</div>
+                            <div class="paper-abstract">
+                                <p>Disease is usually considered a natural phenomenon, unrelated to political events. However, after the 20th century, academics gradually realised that disease and politics are closely linked. In the first path, Foucault discussed how political power influences the birth of disease and how the two construct each other; in the second path, Sontag examined how disease is metaphorically transformed into moral criticism and political oppression from a cultural perspective; The third path, in which some scholars have discussed how national governments and international organisations can effectively control disease. The above three paths explore the relationship between disease and politics in the real world, which is of great significance, but neglect the study of the politics of disease in the virtual context of the Internet. </p>
+                                <p><br>In this regard, this article selects the Chinese and English Wikipedia entries on diseases, and takes "COVID-19" as an example. Using web ethnography and discourse analysis, the article explores how Internet community politics affects the naming of diseases by looking at three aspects: the community negotiation mechanism, the community monitoring mechanism and the community punishment mechanism. The article discusses in turn three negotiation methods, three monitoring mechanisms and three punishment strategies for naming diseases by Wikipedia users, and analyses how the Wikipedia community uses these mechanisms to negotiate the naming of specific diseases, monitor the process and results of disease naming, and punish violations in disease naming. Finally, the paper provides an overview of the concept of disease politics on the Internet and explains how Wikipedia disease politics affects the construction of knowledge. </p>
+                                <p><br>The study found that there is a discursive game and power struggle in naming diseases in the Wikipedia community, in which three mechanisms of negotiation, monitoring and punishment complement each other and work together to name diseases. In the negotiation mechanism, the community plays with the naming of diseases through issue setting, opinion expression and consensus building; in the monitoring mechanism, the community defends the naming of diseases through distributed monitoring, hierarchical monitoring and inspection monitoring; in the punishment mechanism, the community regulates the naming of diseases through three mechanisms: eliminating traces of disease naming codification, restricting disease naming codification and disqualifying disease naming codification, so that the final naming of diseases conforms to Wikipedia's guidelines and policies</p>
+                            </div>
+                        </div>
+                        
+                        <div class="paper-item">
+                            <div class="paper-title">A study on the evolution of open source knowledge in Wikipedia : In the Case of English Articles Involving "Evolution"</div>
+                            <div class="paper-authors">Chen Yiru</div>
+                            <div class="paper-abstract">
+                                <p>The sociology of knowledge believes that knowledge is a product of society and collectives, and many reasons such as social relationships will penetrate into the form and content of knowledge, thus affecting the production process of knowledge. This perspective transcends the traditional viewpoints of static and predetermined knowledge, revealing the dynamic nature of knowledge that can be updated and adjusted with time and context. Due to the swift advancement of internet technology, the mode of knowledge generation and organisation has undergone revolutionary changes, and more and more knowledge resources are being shared, modified and improved by a wide range of users, and open source knowledge has become an important force in promoting knowledge progress and innovation. Among them, open source knowledge platforms such as Wikipedia, with its unique collaborative content production model and scalability technology, have updated the way of acquiring, disseminating and exchanging knowledge, broken the situation of traditional knowledge closure and monopoly, and promoted the free flow and efficient use of knowledge.</p>
+                                <p><br>In order to more comprehensively understand the evolution mechanism of open source knowledge in the Internet era, this study is based on Wikipedia, a typical open source platform, and draws on the process of biological evolution, selecting the English entry "Evolution" as a case study, and focusing on the discussion records left by Wikipedia users as well as the editing history of the Wikipedia system, and using web ethnography, text analysis, and other methods. The case is analysed in depth using methods such as online ethnography and text analysis. Firstly, combining the knowledge environment of Wikipedia and the knowledge fragments in which the entry creator participated, the creation of the "Evolution" entry was traced back, peeking into the formation of the origin of knowledge. In the proliferation stage, knowledge has gone through three stages of expansion and iteration, mutation and differentiation, and adaptive evolution, realizing the process of "knowledge gene → genetic knowledge → updated knowledge → general knowledge → knowledge gene", and gradually formed a rich knowledge system. With the continuous proliferation of "Evolution" knowledge, the interconnection of "entries - linked entries", "entries - unlinked entries" and "entries - new entries" has formed a knowledge survival network. In this survival network, the existence of source knowledge items, controversial knowledge item groups, and cross-domain knowledge item groups reflects the diversity of knowledge populations, and the knowledge within the community "forms a network - discusses extensively - gets feedback - forms a network" The production path also reflects certain internal circulation characteristics. Research has found that the evolution of Wikipedia's open source knowledge is a dynamic, diverse, self-organizing and adaptive process, based on three levels: the Wiki environment, the knowledge itself, and Wiki editors, embodying "natural selection", "survival of the fittest" and "struggle for survival" and other characteristics.</p>
+                                <p><br>By studying the evolution of the "Evolution" articles in Wikipedia, we can gain a deeper understanding of the nature of knowledge in the Internet era and the role of open source platforms in shaping the global knowledge community, providing information for the future development of open source communities.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </section>
+        </main>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+
+            <div class="footer-section">
+                <h3>Editors</h3>
+                <p><strong>Prof. Gan Lihao</strong><br>Professor of Communication<br>East China Normal University</p>
+                <p><strong>Wang Hao</strong><br>PhD. Candidate of Communication<br>East China Normal University</p>
+                <p><strong>Wan Ziqi</strong><br>MA Student of Communication<br>East China Normal University</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>About</h3>
+                <p>This book is an innovative open-source book that offers a deep exploration of the political dimensions embedded within Wikipedia.</p>
+                <p>We will upload this book on Project Gutenberg in open-source way and ensure everyone to access freely.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>For inquiries about the book:</p>
+                <p>ganlihao@126.com</p>
+                <p>+86 13512132313</p>
+                <p>School of Communication,<br>East China Normal University,<br>Shanghai, China
+            </div>
+            
+            <div class="copyright">
+                <p>Designed for Global Research Center on Digital Intelligence Knowledge Systems</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 目录导航高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.content, .chapter');
+            const navLinks = document.querySelectorAll('.toc a');
+            
+            window.addEventListener('scroll', function() {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (pageYOffset >= (sectionTop - 200)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
