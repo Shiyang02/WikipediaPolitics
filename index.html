@@ -541,6 +541,35 @@
                         <h3>Papers</h3>
                         <p>32 Research Papers</p>
                     </div>
+                    <div class="meta-item">
+                        <h3>Full Text</h3> 
+                        <a href="http://worldlibrary.org/eBooks/WPLBN0100750751-Wikipedia-Politics-by-GAN-Lihao-et-al-.aspx?" class="btn">Download the Full Book</a>
+                    </div>
+                    <div class="meta-item">
+                        <h3>Citation</h3>
+                        <!-- 切换按钮 -->
+                        <div>
+                            <button class="btn" onclick="showCitation('apa')">APA</button>
+                            <button class="btn" onclick="showCitation('mla')">MLA</button>
+                            <button class="btn" onclick="showCitation('chicago')">Chicago</button>
+                        </div>
+
+                        <!-- 引用格式展示区 -->
+                        <div id="citation-display" style="margin-top: 1em;">
+                            <p id="citation-text">Click a format to view the citation.</p>
+                        </div>
+                        <script>
+                            const citations = {
+                                apa: "Al. Ga, L. E. (2025). Wikipedia Politics. Retrieved from http://worldlibrary.org/",
+                                mla: "Et Al. Gan, Lihao. Wikipedia Politics. None: Global Center for Digital Knowledge Research, 2025. World Library. Web.",
+                                chicago: "Et Al. Gan, Lihao. Wikipedia Politics. n.p.: Global Center for Digital Knowledge Research, 2025. http://worldlibrary.org/eBooks/WPLBN0100750751-Wikipedia-Politics-by-GAN-Lihao-et-al-.aspx."
+                            };
+    
+                            function showCitation(style) {
+                                const citationText = citations[style] || "Citation not available.";
+                                document.getElementById('citation-text').innerHTML = citationText;
+                            }
+                        </script>
                 </div>
             </section>
             
