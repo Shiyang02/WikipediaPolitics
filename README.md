@@ -1,5 +1,7 @@
 Wikipedia Politics is an access published book written by Prof. Gan Lihao and his team, Global Center for Digital Knowledge Research, authorised under CC BY-ND 4.0.
 
+This book is archived on Zenodo with DOI: 10.5281/zenodo.18585701.
+
 Download link:
 https://github.com/Shiyang02/WikipediaPolitics/releases/download/v2026%2F02%2F04/Wikipedia.Politics.v20260204.pdf
 or
